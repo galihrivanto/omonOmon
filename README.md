@@ -4,8 +4,8 @@
 </div>
 
 - [x] Wallet
-- [ ] Testnet faucet claimer
-- [ ] Inter-wallet transfer
+- [x] Testnet faucet claimer
+- [x] Inter-wallet transfer
 - [ ] dApp interaction automation
 - [ ] NFT interaction automation
 - [ ] DEX interaction automation
