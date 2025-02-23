@@ -9,14 +9,19 @@ import (
 )
 
 var FaucetCmd = &cobra.Command{
-	Use:   "faucet [address]",
+	Use:   "faucet [type] [address]",
 	Short: "Claim MON from the faucet",
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) == 0 {
-			log.Fatal("address is required")
+		if len(args) != 2 {
+			log.Fatal("faucet type and address are required")
 		}
 
-		if err := faucet.Claim(args[0]); err != nil {
+		faucetType := args[0]
+		address := args[1]
+
+		fmt.Println("Claiming MON from faucet", faucetType, "for address", address)
+
+		if err := faucet.Claim(faucetType, address); err != nil {
 			log.Fatal(err)
 		}
 

@@ -10,7 +10,20 @@ import (
 	"github.com/go-rod/stealth"
 )
 
-func Claim(address string) error {
+var factories = map[string]FaucetClaimerFactory{
+	"":        func() FaucetClaimer { return &DefaultFaucetClaimer{} },
+	"default": func() FaucetClaimer { return &DefaultFaucetClaimer{} },
+}
+
+type FaucetClaimer interface {
+	Claim(address string) error
+}
+
+type FaucetClaimerFactory func() FaucetClaimer
+
+type DefaultFaucetClaimer struct{}
+
+func (f *DefaultFaucetClaimer) Claim(address string) error {
 	if address == "" {
 		return errors.New("address is required")
 	}
@@ -58,4 +71,14 @@ func Claim(address string) error {
 	}
 
 	return page.WaitIdle(30 * time.Second)
+}
+
+// Claim claims the faucet for the given address
+func Claim(faucetName string, address string) error {
+	factory, ok := factories[faucetName]
+	if !ok {
+		return fmt.Errorf("faucet %s not found", faucetName)
+	}
+
+	return factory().Claim(address)
 }
